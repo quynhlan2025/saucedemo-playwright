@@ -1,0 +1,36 @@
+{
+  "name": "saucedemo-playwright",
+  "version": "1.0.0",
+  "description": "Playwright E2E framework for SauceDemo with shared auth state",
+  "scripts": {
+    "test": "playwright test",
+    "test:smoke": "playwright test --grep @smoke",
+    "test:regression": "playwright test --grep @regression",
+    "test:smoke:chrome": "playwright test --project=chromium --grep @smoke",
+    "test:smoke:firefox": "playwright test --project=firefox --grep @smoke",
+    "test:regression:chrome": "playwright test --project=chromium --grep @regression",
+    "test:regression:firefox": "playwright test --project=firefox --grep @regression",
+    "test:chrome": "playwright test --project=chromium",
+    "test:firefox": "playwright test --project=firefox",
+    "test:headed": "playwright test --headed",
+    "test:headed:chrome": "playwright test --project=chromium --headed",
+    "test:headed:firefox": "playwright test --project=firefox --headed",
+    "test:ui": "playwright test --ui",
+    "test:debug": "playwright test --debug",
+    "test:report": "playwright show-report",
+    "setup": "playwright test --project=setup",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.44.0",
+    "@types/node": "^20.19.37",
+    "eslint": "^9.0.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-playwright": "^1.6.0",
+    "prettier": "^3.3.0",
+    "typescript-eslint": "^8.0.0"
+  }
+}
