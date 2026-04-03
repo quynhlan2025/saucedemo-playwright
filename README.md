@@ -7,7 +7,7 @@ E2E testing framework for [saucedemo.com](https://www.saucedemo.com) — Playwri
 ## Project Structure
 
 ```ini
-saucedemo-playwright/
+saucedemo-playwright/ 
 ├── pages/
 │   ├── BasePage.ts               # Base class (highlight, click, fill)
 │   ├── LoginPage.ts
@@ -63,7 +63,7 @@ npx playwright test
 Run quickly after each deploy — covers the critical path.
 
 ```bash
-# All smoke tests (using @smoke tag)
+# All smoke tests (using @smoke tag) on Production
 npm run test:smoke
 TEST_ENV=prod npm run test:smoke:chrome
 
@@ -90,9 +90,9 @@ npx playwright test tests/smoke/sm-05-logout.spec.ts
 Full regression — run before release.
 
 ```bash
-# All regression tests (using @regression tag)
-npm run test:regression
-npx playwright test --grep @regression
+# All regression tests (using @regression tag) on Production
+
+TEST_ENV=prod npm run test:regression:chrome
 
 # On a specific browser
 npm run test:regression:chrome
