@@ -30,8 +30,8 @@ test.describe('[SM-02] Inventory', { tag: '@smoke' }, () => {
         const item  = inventoryPage.inventoryItems.nth(i);
         const name  = item.locator('.inventory_item_name');
         const price = item.locator('.inventory_item_price');
-        await expect(name).not.toBeEmpty();
-        await expect(price).not.toBeEmpty();
+        await expect(name).toContainText(/\S/);
+        await expect(price).toContainText(/\S/);
       }
     });
 });

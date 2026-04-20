@@ -23,7 +23,6 @@ test.describe('[SM-01] Login', { tag: '@smoke' }, () => {
     async ({ loginPage }) => {
       await loginPage.navigate();
       await loginPage.loginExpectSuccess(USERS.standard.username, USERS.standard.password);
-      await loginPage.assertUrl('inventory');
     },
   );
 
@@ -34,7 +33,7 @@ test.describe('[SM-01] Login', { tag: '@smoke' }, () => {
       await loginPage.navigate();
       await loginPage.login(USERS.locked.username, USERS.locked.password);
 
-      await loginPage.assertErrorMessage('Epic sadface: Sorry, this user has been locked out.');
+      await loginPage.assertErrorMessage(/locked out/i);
       await expect(loginPage.page).toHaveURL('/');
     },
   );

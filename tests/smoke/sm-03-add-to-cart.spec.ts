@@ -14,7 +14,7 @@ test.describe('[SM-03] Add to cart', { tag: '@smoke' }, () => {
     { annotation: { type: 'testId', description: 'TC-SM-03-A' } },
     async ({ inventoryPage }) => {
       const product = await inventoryPage.pickRandom();
-      await inventoryPage.addToCartByName(product.name);
+      await inventoryPage.addItemToCart(product.name);
       await inventoryPage.assertCartCount(1);
     },
   );
@@ -25,7 +25,7 @@ test.describe('[SM-03] Add to cart', { tag: '@smoke' }, () => {
     async ({ inventoryPage }) => {
       const products = await inventoryPage.pickMultipleRandom(3);
       for (const p of products) {
-        await inventoryPage.addToCartByName(p.name);
+        await inventoryPage.addItemToCart(p.name);
       }
       await inventoryPage.assertCartCount(3);
     },
@@ -36,7 +36,7 @@ test.describe('[SM-03] Add to cart', { tag: '@smoke' }, () => {
     { annotation: { type: 'testId', description: 'TC-SM-03-C' } },
     async ({ inventoryPage, cartPage }) => {
       const product = await inventoryPage.pickRandom();
-      await inventoryPage.addToCartByName(product.name);
+      await inventoryPage.addItemToCart(product.name);
       await inventoryPage.goToCart();
 
       const cartItem = await cartPage.getCartItemDetail(product.name);

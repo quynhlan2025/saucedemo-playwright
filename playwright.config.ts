@@ -21,13 +21,13 @@ export default defineConfig({
 
   use: {
     baseURL: BASE_URL,
-    headless: false,
+    headless: !!process.env.CI,
     launchOptions: {
-      slowMo: 800,
+      slowMo: process.env.CI ? 0 : 800,
     },
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
-    video: 'on',
+    video: 'retain-on-failure',
   },
 
   projects: [

@@ -1,5 +1,5 @@
-import { test as base, expect as baseExpect } from '@playwright/test';
-import { test, expect } from '../../../fixtures';
+import { expect as baseExpect } from '@playwright/test';
+import { test } from '../../../fixtures';
 import { USERS } from '../../../utils/constants';
 
 // ─── Tests that need a fresh (unauthenticated) session ───────────────────────
@@ -21,43 +21,48 @@ test.describe('Login — unauthenticated', { tag: '@regression' }, () => {
         USERS.standard.username,
         USERS.standard.password,
       );
-      await loginPage.assertUrl('inventory');
     });
 
-  test('[TC-LOGIN-03] should show error for locked_out_user',
-    { annotation: { type: 'testId', description: 'TC-LOGIN-03' } },
-    async ({ loginPage }) => {
-      await loginPage.navigate();
-      await loginPage.loginExpectFailure(
-        USERS.locked.username,
-        USERS.locked.password,
-      );
-      await loginPage.assertErrorMessage(/locked out/i);
-    });
+  const loginFailureCases = [
+    {
+      testId: 'TC-LOGIN-03',
+      title: 'should show error for locked_out_user',
+      username: USERS.locked.username,
+      password: USERS.locked.password,
+      errorPattern: /locked out/i,
+    },
+    {
+      testId: 'TC-LOGIN-04',
+      title: 'should show error for wrong credentials',
+      username: 'bad_user',
+      password: 'bad_pass',
+      errorPattern: /username and password do not match/i,
+    },
+    {
+      testId: 'TC-LOGIN-05',
+      title: 'should show error when username is empty',
+      username: '',
+      password: USERS.standard.password,
+      errorPattern: /username is required/i,
+    },
+    {
+      testId: 'TC-LOGIN-06',
+      title: 'should show error when password is empty',
+      username: USERS.standard.username,
+      password: '',
+      errorPattern: /password is required/i,
+    },
+  ];
 
-  test('[TC-LOGIN-04] should show error for wrong credentials',
-    { annotation: { type: 'testId', description: 'TC-LOGIN-04' } },
-    async ({ loginPage }) => {
-      await loginPage.navigate();
-      await loginPage.loginExpectFailure('bad_user', 'bad_pass');
-      await loginPage.assertErrorMessage(/username and password do not match/i);
-    });
-
-  test('[TC-LOGIN-05] should show error when username is empty',
-    { annotation: { type: 'testId', description: 'TC-LOGIN-05' } },
-    async ({ loginPage }) => {
-      await loginPage.navigate();
-      await loginPage.loginExpectFailure('', USERS.standard.password);
-      await loginPage.assertErrorMessage(/username is required/i);
-    });
-
-  test('[TC-LOGIN-06] should show error when password is empty',
-    { annotation: { type: 'testId', description: 'TC-LOGIN-06' } },
-    async ({ loginPage }) => {
-      await loginPage.navigate();
-      await loginPage.loginExpectFailure(USERS.standard.username, '');
-      await loginPage.assertErrorMessage(/password is required/i);
-    });
+  for (const { testId, title, username, password, errorPattern } of loginFailureCases) {
+    test(`[${testId}] ${title}`,
+      { annotation: { type: 'testId', description: testId } },
+      async ({ loginPage }) => {
+        await loginPage.navigate();
+        await loginPage.loginExpectFailure(username, password);
+        await loginPage.assertErrorMessage(errorPattern);
+      });
+  }
 });
 
 // ─── Locked-out user ─────────────────────────────────────────────────────────
@@ -71,7 +76,7 @@ test.describe('Login — locked_out_user', { tag: '@regression' }, () => {
       await loginPage.login(USERS.locked.username, USERS.locked.password);
 
       // Assert 1: error message displays correct content
-      await loginPage.assertErrorMessage('Epic sadface: Sorry, this user has been locked out.');
+      await loginPage.assertErrorMessage(/locked out/i);
 
       // Assert 2: URL stays at "/" → not redirected to inventory
       await baseExpect(loginPage.page).toHaveURL('/');

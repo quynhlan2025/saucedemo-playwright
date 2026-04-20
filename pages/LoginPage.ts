@@ -20,31 +20,43 @@ export class LoginPage extends BasePage {
   }
 
   async login(username: string, password: string) {
-    await this.fillField(this.usernameInput, username);
-    await this.fillField(this.passwordInput, password);
-    await this.clickButton(this.loginButton);
+    await this.step('Fill login credentials', async () => {
+      await this.fillField(this.usernameInput, username);
+      await this.fillField(this.passwordInput, password);
+    });
+    await this.step('Click login button', async () => {
+      await this.clickButton(this.loginButton);
+    });
   }
 
   async loginExpectSuccess(username: string, password: string) {
-    await this.login(username, password);
-    await this.assertUrl(/\/inventory(\.html)?$/);
+    await this.step(`Login as "${username}" → expect redirect to inventory`, async () => {
+      await this.login(username, password);
+      await this.assertUrl(/\/inventory(\.html)?$/);
+    });
   }
 
   async loginExpectFailure(username: string, password: string) {
-    await this.login(username, password);
-    await this.assertVisible(this.errorMessage);
+    await this.step(`Login as "${username || '(empty)'}" → expect error message`, async () => {
+      await this.login(username, password);
+      await this.assertVisible(this.errorMessage);
+    });
   }
 
   // ── Assertions ─────────────────────────────────────────────────────────────
   async assertLoginFormVisible() {
-    await this.assertVisible(this.usernameInput);
-    await this.assertVisible(this.passwordInput);
-    await this.assertVisible(this.loginButton);
+    await this.step('Assert login form is visible', async () => {
+      await this.assertVisible(this.usernameInput);
+      await this.assertVisible(this.passwordInput);
+      await this.assertVisible(this.loginButton);
+    });
   }
 
   async assertErrorMessage(expected: string | RegExp) {
-    await this.assertVisible(this.errorMessage);
-    await this.assertText(this.errorMessage, expected);
+    await this.step(`Assert error message: ${expected}`, async () => {
+      await this.assertVisible(this.errorMessage);
+      await this.assertText(this.errorMessage, expected);
+    });
   }
 
   async assertNoError() {

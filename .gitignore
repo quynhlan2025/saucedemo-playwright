@@ -5,6 +5,7 @@ node_modules/
 playwright-report/
 test-results/
 .playwright/
+screenshots/
 
 # Auth state — contains session tokens, never commit
 auth/user.json
@@ -26,4 +27,5 @@ Thumbs.db
 # Logs
 *.log
 npm-debug.log*
+
 

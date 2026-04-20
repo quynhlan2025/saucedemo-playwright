@@ -14,27 +14,26 @@ test.describe('Inventory page', { tag: '@regression' }, () => {
   test('[TC-INV-02] should add single item to cart',
     { annotation: { type: 'testId', description: 'TC-INV-02' } },
     async ({ inventoryPage }) => {
-      await inventoryPage.addItemToCart('Sauce Labs Backpack');
+      const product = await inventoryPage.pickRandom();
+      await inventoryPage.addItemToCart(product.name);
       await inventoryPage.assertCartCount(1);
     });
 
   test('[TC-INV-03] should add multiple items to cart',
     { annotation: { type: 'testId', description: 'TC-INV-03' } },
     async ({ inventoryPage }) => {
-      await inventoryPage.addMultipleItemsToCart([
-        'Sauce Labs Backpack',
-        'Sauce Labs Bike Light',
-        'Sauce Labs Bolt T-Shirt',
-      ]);
+      const products = await inventoryPage.pickMultipleRandom(3);
+      await inventoryPage.addMultipleItemsToCart(products.map(p => p.name));
       await inventoryPage.assertCartCount(3);
     });
 
   test('[TC-INV-04] should remove item from cart on inventory page',
     { annotation: { type: 'testId', description: 'TC-INV-04' } },
     async ({ inventoryPage }) => {
-      await inventoryPage.addItemToCart('Sauce Labs Backpack');
+      const product = await inventoryPage.pickRandom();
+      await inventoryPage.addItemToCart(product.name);
       await inventoryPage.assertCartCount(1);
-      await inventoryPage.removeItemFromCart('Sauce Labs Backpack');
+      await inventoryPage.removeItemFromCart(product.name);
       await inventoryPage.assertCartCount(0);
     });
 
